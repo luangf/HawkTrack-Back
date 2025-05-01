@@ -41,11 +41,12 @@ public class UserController {
 		return ResponseEntity.ok(userService.getUserById(id));
 	}
 
+	/* O user deve ser cadastrado via register
 	@Operation(summary = "Save user")
 	@PostMapping
 	public ResponseEntity<UserResponseDTO> saveUser(@Valid @RequestBody UserRequestDTO userRequestDTO) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(userService.saveUser(userRequestDTO));
-	}
+	}*/
 
 	@Operation(summary = "Update user by ID")
 	@PutMapping("/{id}")

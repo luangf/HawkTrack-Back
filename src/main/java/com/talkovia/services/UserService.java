@@ -31,15 +31,15 @@ public class UserService {
 				.orElseThrow(() -> new ObjectNotFoundException("User not found! ID: " + id + ", Tipo: " + User.class.getName())));
 	}
 
+	/* Only Register Page to save
 	public UserResponseDTO saveUser(UserRequestDTO userRequestDTO) {
 		return userMapper.entityToResponseDTO(userRepository.save(userMapper.requestDTOToEntity(userRequestDTO)));
-	}
+	}*/
 
 	@Transactional
 	public UserResponseDTO updateUser(Long id, UserRequestDTO userRequestDTO) {
 		User existingUser = userRepository.findById(id)
 				.orElseThrow(() -> new ObjectNotFoundException("User not found! ID: " + id + ", Tipo: " + User.class.getName()));
-		existingUser.setEmail(userRequestDTO.email());
 		existingUser.setUsername(userRequestDTO.username());
 		existingUser.setPassword(userRequestDTO.password());
 		return userMapper.entityToResponseDTO(existingUser);

@@ -1,18 +1,30 @@
-## What is this?
+<h1 align="center" style="font-weight: bold;">HawkTrack 🦅 - Back End</h1>
+
+![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white)
+
+<p align="center">
+ <a href="#about">About</a> • 
+ <a href="#project-preview">Project Preview</a>
+</p>
+
+<h2 id="about">📌 About</h2>
+
 * Back End part of my personal HawkTrack project that I built.
 * Here's the link to the Front End:
 * https://github.com/luangf/HawkTrack-Front
 * It's a project where users can log in, create categories, and add any type of items inside them, for example, a "Bills" category where they can upload photos, files, and text notes. (Under development)
 
-## Project Preview; some photos:
-![01](https://github.com/user-attachments/assets/a17768f8-b901-4d06-ae16-fa30f9bfff5d)
-![02](https://github.com/user-attachments/assets/2a663885-7696-43e8-9177-4e6902cda9b0)
-![03](https://github.com/user-attachments/assets/3e5b249d-65f6-4d61-98a7-492a9b8a3d3a)
-![04](https://github.com/user-attachments/assets/c529a9df-b4c2-4fbe-bb94-7ea1aab42f15)
-![05](https://github.com/user-attachments/assets/7e4f5bff-ed04-4652-befd-812b6e1b71f7)
+<h2 id="project-preview">Project Preview; some photos</h2>
+
+<img src="https://github.com/user-attachments/assets/d09a9659-0133-4a55-8069-175a94a2ffee" alt="Project image" width="400px">
+<img src="https://github.com/user-attachments/assets/7e92d497-f78b-47f2-ad92-284106e5c344" alt="Project image" width="400px">
+<img src="https://github.com/user-attachments/assets/5f4fcf2d-a3f2-4139-9b06-19349c86b137" alt="Project image" width="400px">
+<img src="https://github.com/user-attachments/assets/c529a9df-b4c2-4fbe-bb94-7ea1aab42f15" alt="Project image" width="800px">
+<img src="https://github.com/user-attachments/assets/7e4f5bff-ed04-4652-befd-812b6e1b71f7" alt="Project image" width="800px">
 
 ## Technologies Back End:
-* Java | Spring Boot | REST API's
+* REST API's
 * MapStruct
 * Hibernate | JPA
 * Lombok

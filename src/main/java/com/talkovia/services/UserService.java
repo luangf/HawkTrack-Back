@@ -28,18 +28,13 @@ public class UserService {
 
 	public UserResponseDTO getUserById(Long id) {
 		return userMapper.entityToResponseDTO(userRepository.findById(id)
-				.orElseThrow(() -> new ObjectNotFoundException("User not found! ID: " + id + ", Tipo: " + User.class.getName())));
+				.orElseThrow(() -> new ObjectNotFoundException("User not found! ID: " + id + ", Type: " + User.class.getName())));
 	}
-
-	/* Only Register Page to save
-	public UserResponseDTO saveUser(UserRequestDTO userRequestDTO) {
-		return userMapper.entityToResponseDTO(userRepository.save(userMapper.requestDTOToEntity(userRequestDTO)));
-	}*/
 
 	@Transactional
 	public UserResponseDTO updateUser(Long id, UserRequestDTO userRequestDTO) {
 		User existingUser = userRepository.findById(id)
-				.orElseThrow(() -> new ObjectNotFoundException("User not found! ID: " + id + ", Tipo: " + User.class.getName()));
+				.orElseThrow(() -> new ObjectNotFoundException("User not found! ID: " + id + ", Type: " + User.class.getName()));
 		existingUser.setUsername(userRequestDTO.username());
 		existingUser.setPassword(userRequestDTO.password());
 		return userMapper.entityToResponseDTO(existingUser);
@@ -47,7 +42,7 @@ public class UserService {
 
 	public void deleteUserById(Long id) {
 		if(!userRepository.existsById(id)) {
-			throw new ObjectNotFoundException("User not found! ID: " + id + ", Tipo: " + User.class.getName());
+			throw new ObjectNotFoundException("User not found! ID: " + id + ", Type: " + User.class.getName());
 		}
 		userRepository.deleteById(id);
 	}

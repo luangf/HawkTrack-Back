@@ -1,20 +1,13 @@
 package com.talkovia.model;
 
-import java.time.LocalDateTime;
-
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
-import jakarta.persistence.Table;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import java.time.Instant;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -35,14 +28,13 @@ public class User {
 	@Column(nullable = false, length = 60)
 	private String password;
 
-	//maybe change to UTC future, timezone padrao banco...
 	@CreationTimestamp
-	private LocalDateTime createdAt;
+	private Instant createdAt;
 
 	@UpdateTimestamp
-	private LocalDateTime updatedAt;
+	private Instant updatedAt;
 
-	private LocalDateTime lastLoginAt;
+	private Instant lastLoginAt;
 
 	@Column(nullable = false)
 	private boolean active = true;
@@ -55,4 +47,12 @@ public class User {
 	
 	@Lob
     private byte[] image;
+
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinTable(
+			name = "users_roles",
+			joinColumns = @JoinColumn(name = "user_id"),
+			inverseJoinColumns = @JoinColumn(name = "role_id")
+	)
+	private Set<Role> roles;
 }

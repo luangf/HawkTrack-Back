@@ -8,6 +8,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.Instant;
 
 @Entity
 @Table(name = "categories")
@@ -22,4 +26,10 @@ public class Category {
 	
 	@Column(length = 250)
 	private String description;
+
+	@CreationTimestamp
+	private Instant createdAt;
+
+	@UpdateTimestamp
+	private Instant updatedAt;
 }	

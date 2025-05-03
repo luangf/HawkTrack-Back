@@ -4,7 +4,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import com.talkovia.dto.ForgotRequestDTO;
+import com.talkovia.dto.auth.ForgotRequestDTO;
 
 @Service
 public class EmailService {
@@ -18,8 +18,8 @@ public class EmailService {
 		var message= new SimpleMailMessage();
 		message.setFrom("noreply@email.com");
 		message.setTo(email.email());
-		message.setSubject("recupeção de senha");
-		message.setText("por favor, recupere sua senha nesse link");
+		message.setSubject("Password Recovery");
+		message.setText("please, recover your password with this link");
 		mailSender.send(message);
 	}
 }

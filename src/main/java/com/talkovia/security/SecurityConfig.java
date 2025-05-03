@@ -23,7 +23,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
     private final SecurityFilter securityFilter;
 
-	public SecurityConfig(CustomUserDetailsService userDetailsService, SecurityFilter securityFilter) {
+	public SecurityConfig(SecurityFilter securityFilter) {
 		this.securityFilter = securityFilter;
 	}
     

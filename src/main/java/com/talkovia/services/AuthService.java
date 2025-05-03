@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 import com.talkovia.customexceptions.InvalidCredentialsException;
 import com.talkovia.customexceptions.ObjectNotFoundException;
 import com.talkovia.customexceptions.UserAlreadyExistsException;
-import com.talkovia.dto.LoginRegisterResponseDTO;
-import com.talkovia.dto.LoginRequestDTO;
-import com.talkovia.dto.RegisterRequestDTO;
+import com.talkovia.dto.auth.LoginRegisterResponseDTO;
+import com.talkovia.dto.auth.LoginRequestDTO;
+import com.talkovia.dto.auth.RegisterRequestDTO;
 import com.talkovia.model.User;
 import com.talkovia.repositories.UserRepository;
 import com.talkovia.security.TokenService;
@@ -27,7 +27,7 @@ public class AuthService {
 
 	public LoginRegisterResponseDTO login(LoginRequestDTO loginRequestDTO) {
 		User user = userRepository.findByEmail(loginRequestDTO.email())
-				.orElseThrow(() -> new ObjectNotFoundException("Email não encontrado"));
+				.orElseThrow(() -> new ObjectNotFoundException("Email not found"));
 		if (passwordEncoder.matches(loginRequestDTO.password(), user.getPassword())) {
 			String token = tokenService.generateToken(user);
 			return new LoginRegisterResponseDTO(user.getUsername(), token);

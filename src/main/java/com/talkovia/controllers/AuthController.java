@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.talkovia.dto.ForgotRequestDTO;
-import com.talkovia.dto.LoginRegisterResponseDTO;
-import com.talkovia.dto.LoginRequestDTO;
-import com.talkovia.dto.RegisterRequestDTO;
+import com.talkovia.dto.auth.ForgotRequestDTO;
+import com.talkovia.dto.auth.LoginRegisterResponseDTO;
+import com.talkovia.dto.auth.LoginRequestDTO;
+import com.talkovia.dto.auth.RegisterRequestDTO;
 import com.talkovia.services.AuthService;
 import com.talkovia.services.EmailService;
 

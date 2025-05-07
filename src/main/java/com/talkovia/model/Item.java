@@ -1,12 +1,9 @@
 package com.talkovia.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -14,9 +11,11 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.Instant;
 
 @Entity
-@Table(name = "item")
+@Table(name = "items")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Item {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -32,4 +31,8 @@ public class Item {
 
 	@UpdateTimestamp
 	private Instant updatedAt;
+
+	@ManyToOne
+	@JoinColumn(name = "category_id")
+	private Category category;
 }

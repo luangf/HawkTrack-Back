@@ -1,8 +1,7 @@
 package com.talkovia.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -13,39 +12,44 @@ import java.util.Set;
 @Table(name = "users")
 @Getter
 @Setter
-//@EqualsAndHashCode(of="id")
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Long id;
 
-	@Column(unique = true, nullable = false, length = 254)
+	@Column(name = "email", unique = true, nullable = false, length = 254)
 	private String email;
 
-	@Column(unique = true, nullable = false, length = 30)
+	@Column(name = "username", unique = true, nullable = false, length = 30)
 	private String username;
 
-	@Column(nullable = false, length = 60)
+	@Column(name = "password", nullable = false, length = 60)
 	private String password;
 
 	@CreationTimestamp
+	@Column(name = "created_at", nullable = false)
 	private Instant createdAt;
 
 	@UpdateTimestamp
+	@Column(name = "updated_at", nullable = false)
 	private Instant updatedAt;
 
+	@Column(name = "last_login_at")
 	private Instant lastLoginAt;
 
-	@Column(nullable = false)
+	@Column(name = "active", nullable = false)
 	private boolean active = true;
 	
-	@Column(nullable = false)
+	@Column(name = "email_verified", nullable = false)
 	private boolean emailVerified = false;
 	
-	//maybe convert to S3 AWS imagePath
-	//private String imagePath;
+	//maybe convert to S3 AWS imagePath; private String imagePath;
 	
 	@Lob
+	@Column(name = "image")
     private byte[] image;
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

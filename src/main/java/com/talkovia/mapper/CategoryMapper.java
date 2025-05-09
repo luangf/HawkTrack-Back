@@ -5,8 +5,8 @@ import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import com.talkovia.dto.CategoryRequestDTO;
-import com.talkovia.dto.CategoryResponseDTO;
+import com.talkovia.dto.category.CategoryRequestDTO;
+import com.talkovia.dto.category.CategoryResponseDTO;
 import com.talkovia.model.Category;
 
 @Mapper(componentModel = "spring")

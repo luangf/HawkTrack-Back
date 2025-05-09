@@ -1,12 +1,13 @@
 package com.talkovia.services;
 import java.util.List;
 
+import com.talkovia.model.Item;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.talkovia.customexceptions.ObjectNotFoundException;
-import com.talkovia.dto.CategoryRequestDTO;
-import com.talkovia.dto.CategoryResponseDTO;
+import com.talkovia.dto.category.CategoryRequestDTO;
+import com.talkovia.dto.category.CategoryResponseDTO;
 import com.talkovia.mapper.CategoryMapper;
 import com.talkovia.model.Category;
 import com.talkovia.repositories.CategoryRepository;
@@ -31,7 +32,14 @@ public class CategoryService {
 	}
 
 	public void saveCategory(CategoryRequestDTO categoryRequestDTO) {
-		categoryRepository.save(categoryMapper.requestDTOToEntity(categoryRequestDTO));
+		Category category = categoryMapper.requestDTOToEntity(categoryRequestDTO);
+
+		// Associar cada item da lista à categoria antes de salvar
+		for (Item item : categoryRequestDTO.items()) {
+			item.setCategory(category);  // Definindo a categoria para cada item
+		}
+
+		categoryRepository.save(category);
 	}
 
 	@Transactional

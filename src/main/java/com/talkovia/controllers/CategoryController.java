@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.talkovia.dto.CategoryRequestDTO;
-import com.talkovia.dto.CategoryResponseDTO;
+import com.talkovia.dto.category.CategoryRequestDTO;
+import com.talkovia.dto.category.CategoryResponseDTO;
 import com.talkovia.services.CategoryService;
 
 import io.swagger.v3.oas.annotations.Operation;

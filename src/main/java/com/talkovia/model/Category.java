@@ -18,21 +18,25 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Category {
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Long id;
 	
-	@Column(unique = true, nullable = false, length = 100)
+	@Column(name = "name", unique = true, nullable = false, length = 100)
 	private String name;
 	
-	@Column(length = 250)
+	@Column(name = "description", length = 750)
 	private String description;
 
 	@CreationTimestamp
+	@Column(name = "created_at", nullable = false)
 	private Instant createdAt;
 
 	@UpdateTimestamp
+	@Column(name = "updated_at", nullable = false)
 	private Instant updatedAt;
 
-	@OneToMany(mappedBy = "category")
+	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
 	private List<Item> items;
 }	

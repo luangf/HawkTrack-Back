@@ -1,5 +1,7 @@
 package com.talkovia.services;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,24 +20,29 @@ public class AuthService {
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final TokenService tokenService;
+	private final CookieService cookieService;
 
-	public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, TokenService tokenService) {
+	public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, TokenService tokenService, CookieService cookieService) {
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.tokenService = tokenService;
+		this.cookieService = cookieService;
 	}
 
-	public LoginRegisterResponseDTO login(LoginRequestDTO loginRequestDTO) {
+	public LoginRegisterResponseDTO login(LoginRequestDTO loginRequestDTO, HttpServletResponse response) {
 		User user = userRepository.findByEmail(loginRequestDTO.email())
 				.orElseThrow(() -> new ObjectNotFoundException("Email not found"));
 		if (passwordEncoder.matches(loginRequestDTO.password(), user.getPassword())) {
 			String token = tokenService.generateToken(user);
-			return new LoginRegisterResponseDTO(user.getUsername(), token);
+
+			cookieService.generateCookieWithJWT(token, response);
+
+			return new LoginRegisterResponseDTO(user.getUsername());
 		}
 		throw new InvalidCredentialsException("Invalid Credentials");
 	}
 
-	public LoginRegisterResponseDTO register(RegisterRequestDTO registerRequestDTO) {
+	public LoginRegisterResponseDTO register(RegisterRequestDTO registerRequestDTO, HttpServletResponse response) {
 		if (userRepository.findByEmail(registerRequestDTO.email()).isPresent()) {
 			throw new UserAlreadyExistsException("Email already in use");
 		}
@@ -50,6 +57,13 @@ public class AuthService {
 		userRepository.save(newUser);
 
 		String token = tokenService.generateToken(newUser);
-		return new LoginRegisterResponseDTO(newUser.getUsername(), token);
+
+		cookieService.generateCookieWithJWT(token, response);
+
+		return new LoginRegisterResponseDTO(newUser.getUsername());
+	}
+
+	public void logout(HttpServletResponse response){
+		cookieService.expirateCookie(response);
 	}
 }

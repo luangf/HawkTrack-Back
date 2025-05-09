@@ -3,6 +3,7 @@ package com.talkovia.security;
 import java.io.IOException;
 import java.util.Collections;
 
+import jakarta.servlet.http.Cookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,11 +31,11 @@ public class SecurityFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		var token = recoverToken(request);
-		var login = tokenService.validateToken(token); // email
+		var token = recoverTokenViaCookie(request);
+		var email = tokenService.validateToken(token);
 
-		if (login != null) {
-			User user = userRepository.findByEmail(login).orElseThrow(() -> new RuntimeException("User Not Found"));
+		if (email != null) {
+			User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User Not Found"));
 			var authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
 			var authentication = new UsernamePasswordAuthenticationToken(user, null, authorities);
 			SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -42,9 +43,21 @@ public class SecurityFilter extends OncePerRequestFilter {
 		filterChain.doFilter(request, response);
 	}
 
-	private String recoverToken(HttpServletRequest request) {
+	//I used before change to cookie http only, getting from authorization
+	private String recoverTokenViaAuthorization(HttpServletRequest request) {
 		var authHeader = request.getHeader("Authorization");
 		if (authHeader == null) return null;
 		return authHeader.replace("Bearer ", "");
+	}
+
+	private String recoverTokenViaCookie(HttpServletRequest request) {
+		if (request.getCookies() != null) {
+			for (Cookie cookie : request.getCookies()) {
+				if ("auth-token".equals(cookie.getName())) {
+					return cookie.getValue();
+				}
+			}
+		}
+		return null;
 	}
 }

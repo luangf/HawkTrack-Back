@@ -1,5 +1,5 @@
 package com.talkovia.dto.auth;
 
-public record LoginRegisterResponseDTO(String username, String token) {
+public record LoginRegisterResponseDTO(String username) {
 
 }

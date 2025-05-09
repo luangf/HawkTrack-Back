@@ -1,11 +1,12 @@
 package com.talkovia.controllers;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.web.bind.annotation.*;
 
 import com.talkovia.dto.auth.ForgotRequestDTO;
 import com.talkovia.dto.auth.LoginRegisterResponseDTO;
@@ -32,14 +33,14 @@ public class AuthController {
 	
 	@Operation(summary = "Login an existing user")
 	@PostMapping("/login")
-	public ResponseEntity<LoginRegisterResponseDTO> login(@Valid @RequestBody LoginRequestDTO loginRequestDTO) {
-		return ResponseEntity.ok(authService.login(loginRequestDTO));
+	public ResponseEntity<LoginRegisterResponseDTO> login(@Valid @RequestBody LoginRequestDTO loginRequestDTO, HttpServletResponse response) {
+		return ResponseEntity.ok(authService.login(loginRequestDTO, response));
 	}
 
 	@Operation(summary = "Register a new user")
 	@PostMapping("/register")
-	public ResponseEntity<LoginRegisterResponseDTO> register(@Valid @RequestBody RegisterRequestDTO registerRequestDTO) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(registerRequestDTO));
+	public ResponseEntity<LoginRegisterResponseDTO> register(@Valid @RequestBody RegisterRequestDTO registerRequestDTO, HttpServletResponse response) {
+		return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(registerRequestDTO, response));
 	}
 	
 	@Operation(summary = "Forgot password")
@@ -48,4 +49,20 @@ public class AuthController {
 		emailService.sendEmail(forgotRequestDTO);
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
+
+	@Operation(summary = "OAuth")
+	@GetMapping("/oauth2/success")
+	public ResponseEntity<?> oauthSuccess(@AuthenticationPrincipal OAuth2User principal) {
+		String email = principal.getAttribute("email");
+		return ResponseEntity.ok("Bem-vindo, " + email);
+	}
+
+	@Operation(summary = "Logout")
+	@PostMapping("/logout")
+	public ResponseEntity<Void> logout(HttpServletResponse response) {
+		authService.logout(response);
+		return ResponseEntity.ok().build();
+	}
+
+
 }

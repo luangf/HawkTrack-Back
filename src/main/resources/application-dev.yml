@@ -49,3 +49,4 @@ api:
   security:
     token:
       secret: ${TOKEN_SECRET}
+      expiration: 2

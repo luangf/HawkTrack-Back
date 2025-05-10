@@ -7,6 +7,7 @@ import jakarta.servlet.http.Cookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -31,26 +32,24 @@ public class SecurityFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		var token = recoverTokenViaCookie(request);
-		var email = tokenService.validateToken(token);
-
-		if (email != null) {
-			User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User Not Found"));
-			var authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
-			var authentication = new UsernamePasswordAuthenticationToken(user, null, authorities);
+		var token = recoverTokenCookie(request);
+		if (token != null) {
+			var email = tokenService.validateToken(token);
+			UserDetails user = userRepository.findByEmail(email);
+			var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 		}
 		filterChain.doFilter(request, response);
 	}
 
 	//I used before change to cookie http only, getting from authorization
-	private String recoverTokenViaAuthorization(HttpServletRequest request) {
+	private String recoverTokenAuthorization(HttpServletRequest request) {
 		var authHeader = request.getHeader("Authorization");
 		if (authHeader == null) return null;
 		return authHeader.replace("Bearer ", "");
 	}
 
-	private String recoverTokenViaCookie(HttpServletRequest request) {
+	private String recoverTokenCookie(HttpServletRequest request) {
 		if (request.getCookies() != null) {
 			for (Cookie cookie : request.getCookies()) {
 				if ("auth-token".equals(cookie.getName())) {

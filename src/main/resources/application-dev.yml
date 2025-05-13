@@ -32,12 +32,14 @@ spring:
           google:
             client-id: ${CLIENT_ID_GOOGLE}
             client-secret: ${CLIENT_SECRET_GOOGLE}
+#              - profile
+#              - email
           github:
             client-id: ${CLIENT_ID_GITHUB}
             client-secret: ${CLIENT_SECRET_GITHUB}
-#            scope:
-#              - profile
-#              - email
+            scope:
+#              - read:user
+#              - user:email
 
 server:
   servlet:

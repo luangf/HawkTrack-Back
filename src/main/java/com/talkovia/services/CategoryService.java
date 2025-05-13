@@ -1,10 +1,8 @@
 package com.talkovia.services;
-import java.util.List;
 
-import com.talkovia.model.Item;
+import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.talkovia.customexceptions.ObjectNotFoundException;
 import com.talkovia.dto.category.CategoryRequestDTO;
 import com.talkovia.dto.category.CategoryResponseDTO;
@@ -16,14 +14,16 @@ import com.talkovia.repositories.CategoryRepository;
 public class CategoryService {
 	private final CategoryRepository categoryRepository;
 	private final CategoryMapper categoryMapper;
-	
-	public CategoryService(CategoryRepository categoryRepository, CategoryMapper categoryMapper) {
+	private final AuthenticatedUserService authenticatedUserService;
+
+	public CategoryService(CategoryRepository categoryRepository, CategoryMapper categoryMapper, AuthenticatedUserService authenticatedUserService) {
 		this.categoryRepository = categoryRepository;
 		this.categoryMapper = categoryMapper;
+		this.authenticatedUserService = authenticatedUserService;
 	}
 	
 	public List<CategoryResponseDTO> getAllCategories() {
-		return categoryMapper.entityListToResponseDTOList(categoryRepository.findAll());
+		return categoryMapper.entityListToResponseDTOList(categoryRepository.findAllByUser(authenticatedUserService.getAuthenticatedUser()));
 	}
 
 	public CategoryResponseDTO getCategoryById(Long id) {
@@ -33,12 +33,7 @@ public class CategoryService {
 
 	public void saveCategory(CategoryRequestDTO categoryRequestDTO) {
 		Category category = categoryMapper.requestDTOToEntity(categoryRequestDTO);
-
-		// Associar cada item da lista à categoria antes de salvar
-		for (Item item : categoryRequestDTO.items()) {
-			item.setCategory(category);  // Definindo a categoria para cada item
-		}
-
+		category.setUser(authenticatedUserService.getAuthenticatedUser());
 		categoryRepository.save(category);
 	}
 

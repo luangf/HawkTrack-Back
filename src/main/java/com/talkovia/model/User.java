@@ -57,7 +57,11 @@ public class User implements UserDetails {
 	@Column(name = "image")
     private byte[] image;
 
-	private UserRole role;
+	@Enumerated(EnumType.STRING)
+	private UserRole role = UserRole.USER;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private List<Category> categories;
 
 	public User(String email, String username, String password){
 		this.email=email;

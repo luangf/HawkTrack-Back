@@ -2,6 +2,7 @@ package com.talkovia.security;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Optional;
 
 import jakarta.servlet.http.Cookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -35,9 +36,11 @@ public class SecurityFilter extends OncePerRequestFilter {
 		var token = recoverTokenCookie(request);
 		if (token != null) {
 			var email = tokenService.validateToken(token);
-			UserDetails user = userRepository.findByEmail(email);
-			var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-			SecurityContextHolder.getContext().setAuthentication(authentication);
+			Optional<User> user = userRepository.findByEmail(email);
+			if(user.isPresent()){
+				var authentication = new UsernamePasswordAuthenticationToken(user, null, user.get().getAuthorities());
+				SecurityContextHolder.getContext().setAuthentication(authentication);
+			}
 		}
 		filterChain.doFilter(request, response);
 	}

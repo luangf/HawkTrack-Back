@@ -12,7 +12,5 @@ public record CategoryRequestDTO(
 		String name,
 
 		@Size(max = 750, message = "Category description max value is 750 characters long")
-		String description,
-
-		List<Item> items
+		String description
 		) {}

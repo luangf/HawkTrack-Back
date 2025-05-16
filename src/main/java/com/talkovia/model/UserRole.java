@@ -1,15 +1,13 @@
 package com.talkovia.model;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-@Getter
+@RequiredArgsConstructor
 public enum UserRole {
     ADMIN("admin"),
     USER("user");
 
-    private String role;
-
-    UserRole(String role){
-        this.role=role;
-    }
+    @Getter
+    private final String role;
 }

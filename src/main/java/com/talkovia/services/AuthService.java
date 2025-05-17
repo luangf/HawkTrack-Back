@@ -43,15 +43,15 @@ public class AuthService {
 
     public LoginRegisterResponseDTO register(RegisterRequestDTO registerRequestDTO, HttpServletResponse response) {
         UserDetails userByEmail = userRepository.findByEmail(registerRequestDTO.email());
-        Optional<User> userByUsername = userRepository.findByUsername(registerRequestDTO.username());
+        UserDetails userByUsername = userRepository.findByUsername(registerRequestDTO.username());
 
-        if(userByEmail != null && userByUsername.isPresent()){
+        if(userByEmail != null && userByUsername != null){
             throw new UserAlreadyExistsException("Email and username already in use");
         }
         else if (userByEmail != null) {
             throw new UserAlreadyExistsException("Email already in use");
         }
-        else if (userByUsername.isPresent()) {
+        else if (userByUsername != null) {
             throw new UserAlreadyExistsException("Username already in use");
         }
 
